@@ -36,7 +36,7 @@ public class BeeManagerSystem : SystemBase
         var stackHeights = bufferFromEntity[bufferEntity];
 
         float deltaTime = Time.fixedDeltaTime;
-        var random = new Unity.Mathematics.Random(1234789);
+        var random = new Unity.Mathematics.Random(1234);
 
         NativeList<Entity> teamsOfBlueBee = new NativeList<Entity>(beeParams.maxBeeCount, Allocator.TempJob);
         NativeList<Entity> teamsOfYellowBee = new NativeList<Entity>(beeParams.maxBeeCount, Allocator.TempJob);
