@@ -20,7 +20,6 @@ public class BeeSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, ID
             maxSpawnSpeed = this.maxSpawnSpeed,
             team = this.team
         };
-
         dstManager.AddComponentData<BeeSpawner>(entity, spawner);
     }
 

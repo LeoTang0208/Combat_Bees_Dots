@@ -23,7 +23,7 @@ public class BeeAuthoring : MonoBehaviour, IConvertGameObjectToEntity
 
 }
 
-public struct Team : ISharedComponentData
+public struct Team : IComponentData
 {
     public int team;
     /* Note:

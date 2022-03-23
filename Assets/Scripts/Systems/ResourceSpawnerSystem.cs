@@ -24,7 +24,7 @@ public class ResourceSpawnerSystem : SystemBase
                     ecb.SetComponent(bee, new Scale { Value = resParams.resourceSize });
 
                     float3 pos;
-                    if (spawner.isPosRandom)
+                    if (spawner.isRandom)
                     {
                         pos = Utils.GetRandomPosition(resGridParams, field, random.NextFloat());
                         ecb.SetComponent(bee, new Translation { Value = pos });
@@ -37,14 +37,6 @@ public class ResourceSpawnerSystem : SystemBase
 
                     float size = resParams.resourceSize;
                     ecb.AddComponent(bee, new NonUniformScale { Value = new float3(size, size, size) });
-
-                    /*
-                    int gx;
-                    int gy;
-                    Utils.GetGridIndex(resGridParams, pos, out gx, out gy);
-                    ecb.SetComponent(bee, new GridX { gridX = gx });
-                    ecb.SetComponent(bee, new GridY { gridY = gy });
-                    */
                 }
                 ecb.DestroyEntity(spawnerEntity);
             }).Run();

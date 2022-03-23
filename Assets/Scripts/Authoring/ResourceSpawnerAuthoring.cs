@@ -19,7 +19,7 @@ public class ResourceSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntit
             spawnTimer = this.spawnTimer,
             beesPerResource = this.beesPerResource,
             count = this.startResourceCount,
-            isPosRandom = true
+            isRandom = true
         };
 
         dstManager.AddComponentData<resourceSpawner>(entity, spawner);
@@ -38,5 +38,5 @@ public struct resourceSpawner : IComponentData
     public float spawnTimer;
     public int beesPerResource;
     public int count;
-    public bool isPosRandom;
+    public bool isRandom;
 }

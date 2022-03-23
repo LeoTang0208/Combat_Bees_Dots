@@ -191,13 +191,15 @@ public class BeeManagerSystem : SystemBase
         ecb.Playback(EntityManager);
         ecb.Dispose();
 
-        NativeList<Entity> deadBeeList = new NativeList<Entity>(beeParams.maxBeeCount, Allocator.TempJob);
+        unHeldResArray.Dispose();
+        Team_B.Dispose();
+        Team_Y.Dispose();
+
         var ecb1 = new EntityCommandBuffer(Allocator.TempJob);
         Entities
             .WithName("Bee_Has_Target_Bee")
             .WithNone<Dead>()
             .WithAll<Velocity>()
-            .WithDisposeOnCompletion(deadBeeList)
             .ForEach((Entity beeEntity, in Team Team, in TargetBee targetBee, in Translation pos) =>
             {
                 Velocity velocity = GetComponent<Velocity>(beeEntity);
@@ -209,41 +211,30 @@ public class BeeManagerSystem : SystemBase
                 }
                 else
                 {
-                    // Bee is attacked be previous bee
-                    int deadListIndex = Utils.SearchDeadBee(deadBeeList, beeEntity);
-                    if (deadListIndex != -1)
+                    float3 delta = GetComponent<Translation>(targetBee.bee).Value - pos.Value;
+                    float sqrDist = delta.x * delta.x + delta.y * delta.y + delta.z * delta.z;
+
+                    if (sqrDist > beeParams.attackDistance * beeParams.attackDistance)
                     {
-                        deadBeeList.RemoveAt(deadListIndex);
+                        velocity.vel += delta * (beeParams.chaseForce * deltaTime / math.sqrt(sqrDist));
+                        ecb1.SetComponent<Velocity>(beeEntity, new Velocity { vel = velocity.vel });
                     }
                     else
                     {
-                        float3 delta = GetComponent<Translation>(targetBee.bee).Value - pos.Value;
-                        float sqrDist = delta.x * delta.x + delta.y * delta.y + delta.z * delta.z;
-
-                        if (sqrDist > beeParams.attackDistance * beeParams.attackDistance)
+                        if (sqrDist > 0)
                         {
-                            velocity.vel += delta * (beeParams.chaseForce * deltaTime / math.sqrt(sqrDist));
+                            ecb1.AddComponent<IsAttacking>(beeEntity);
+
+                            velocity.vel += delta * (beeParams.attackForce * deltaTime / math.sqrt(sqrDist));
                             ecb1.SetComponent<Velocity>(beeEntity, new Velocity { vel = velocity.vel });
-                        }
-                        else
-                        {
-                            // make sure targetBee is not itself
-                            if (sqrDist > 0)
+
+                            if (sqrDist < beeParams.hitDistance * beeParams.hitDistance)
                             {
-                                ecb1.AddComponent<IsAttacking>(beeEntity);
-
-                                velocity.vel += delta * (beeParams.attackForce * deltaTime / math.sqrt(sqrDist));
-                                ecb1.SetComponent<Velocity>(beeEntity, new Velocity { vel = velocity.vel });
-
-                                if (sqrDist < beeParams.hitDistance * beeParams.hitDistance)
-                                {
-                                    // ToDo, spawn blood particle
-                                    ecb1.AddComponent<Dead>(targetBee.bee);
-                                    Velocity targetVelocity = GetComponent<Velocity>(targetBee.bee);
-                                    ecb1.SetComponent<Velocity>(targetBee.bee, new Velocity { vel = targetVelocity.vel * .5f });
-                                    ecb1.RemoveComponent<TargetBee>(beeEntity);
-                                    deadBeeList.Add(targetBee.bee);
-                                }
+                                // ToDo, spawn blood particle
+                                ecb1.AddComponent<Dead>(targetBee.bee);
+                                Velocity targetVelocity = GetComponent<Velocity>(targetBee.bee);
+                                ecb1.SetComponent<Velocity>(targetBee.bee, new Velocity { vel = targetVelocity.vel * .5f });
+                                ecb1.RemoveComponent<TargetBee>(beeEntity);
                             }
                         }
                     }
@@ -360,7 +351,7 @@ public class BeeManagerSystem : SystemBase
             {
                 if (random.NextFloat() < (deathTimer.dTimer - .5f) * .5f)
                 {
-                    //////////////////////////// ToDo, Blood Particle
+                    // ToDo, Blood Particle
                 }
 
                 velocity.vel.y += field.gravity * deltaTime;

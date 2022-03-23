@@ -155,11 +155,9 @@ public class ResourceManagerSystem : SystemBase
                         ecb1.AddComponent<Translation>(newSpawner, pos);
                         ecb1.AddComponent(newSpawner, beeSpawner);
 
-                        //////////////////////////// ToDo, spawn Falash particle
-                        //ParticleManager.SpawnParticle(resource.position, ParticleType.SpawnFlash, Vector3.zero, 6f, 5);
+                        // ToDo, spawn Falash particle
 
                         ecb1.AddComponent<Dead>(resEntity);
-                        // destory later to avoid race condition in BeeManagerSystem
                         ecb1.DestroyEntity(resEntity);
                     }
                     else
@@ -193,9 +191,6 @@ public class ResourceManagerSystem : SystemBase
             .ForEach((Entity resEntity, ref LocalToWorld localToWorld, in Scale scale, in Translation translation) =>
             {
                 localToWorld.Value = float4x4.TRS(translation.Value, quaternion.identity, scale.Value);
-
             }).ScheduleParallel();
-
-
     }
 }
