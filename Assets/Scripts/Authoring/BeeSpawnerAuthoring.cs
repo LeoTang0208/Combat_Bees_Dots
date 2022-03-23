@@ -9,7 +9,7 @@ public class BeeSpawnerAuthoring : MonoBehaviour, IConvertGameObjectToEntity, ID
     public GameObject beePrefab;
     public int initialBeeCount;
     public float maxSpawnSpeed;
-    public BeeTeam.TeamColor team;
+    public int team;
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
@@ -35,5 +35,5 @@ public struct BeeSpawner : IComponentData
     public Entity beePrefab;
     public int count;
     public float maxSpawnSpeed;
-    public BeeTeam.TeamColor team;
+    public int team;
 }

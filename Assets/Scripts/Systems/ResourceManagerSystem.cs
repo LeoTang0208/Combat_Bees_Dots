@@ -32,28 +32,7 @@ public class ResourceManagerSystem : SystemBase
         var stackHeights = bufferFromEntity[bufferEntity];
 
         float deltaTime = Time.fixedDeltaTime;
-        //float deltaTime = Time.DeltaTime;
 
-#if COMMENT
-        NativeArray<Entity> resArray = resQuery.ToEntityArrayAsync(Allocator.TempJob, out var resHandle);
-        resHandle.Complete();
-
-        /*
-        if (resArray.Length < 1000 && MouseRaycaster.isMouseTouchingField)
-        {
-            if (Input.GetKey(KeyCode.Mouse0))
-            {
-                spawnTimer += Time.deltaTime;
-                while (spawnTimer > 1f / spawnRate)
-                {
-                    spawnTimer -= 1f / spawnRate;
-                    SpawnResource(MouseRaycaster.worldMousePosition);
-                }
-            }
-        }
-        */
-        resArray.Dispose();
-#endif
         var ecb0 = new EntityCommandBuffer(Allocator.TempJob);
         Entities
             .WithName("Resource_Is_Dead")
@@ -70,8 +49,6 @@ public class ResourceManagerSystem : SystemBase
             }).Run();
         ecb0.Playback(EntityManager);
         ecb0.Dispose();
-
-        /* --------------------------------------------------------------------------------- */
 
         var ecb = new EntityCommandBuffer(Allocator.TempJob);
         Entities
@@ -97,9 +74,6 @@ public class ResourceManagerSystem : SystemBase
             }).Run();
         ecb.Playback(EntityManager);
         ecb.Dispose();
-
-
-        /* --------------------------------------------------------------------------------- */
 
         var ecb1 = new EntityCommandBuffer(Allocator.TempJob);
         Entities
@@ -146,15 +120,12 @@ public class ResourceManagerSystem : SystemBase
                     velocity.vel.y *= .8f;
                 }
 
-                //Debug.Log("pos = " + pos.Value);
-
                 // Get latest buffer
                 bufferFromEntity = GetBufferFromEntity<StackHeightParams>();
                 stackHeights = bufferFromEntity[bufferEntity];
                 float floorY = Utils.GetStackPos(resParams, resGridParams, field, stackHeights, gX.gridX, gY.gridY).y;
                 if(pos.Value.y < floorY)
                 {
-                    //Debug.Log("pos = " + pos.Value + ", floorY = " + floorY + ", !!!!!!!!!!!!!!!!!!");
                     pos.Value.y = floorY;
                     if(math.abs(pos.Value.x) > field.size.x * .4f)
                     {
@@ -167,7 +138,7 @@ public class ResourceManagerSystem : SystemBase
                                 beePrefab = beeParams.blueSpawnerPrefab,
                                 count = resParams.beesPerResource,
                                 maxSpawnSpeed = beeParams.maxSpawnSpeed,
-                                team = BeeTeam.TeamColor.BLUE
+                                team = 0
                             };
                         }
                         else
@@ -177,7 +148,7 @@ public class ResourceManagerSystem : SystemBase
                                 beePrefab = beeParams.yellowSpawnerPrefab,
                                 count = resParams.beesPerResource,
                                 maxSpawnSpeed = beeParams.maxSpawnSpeed,
-                                team = BeeTeam.TeamColor.YELLOW
+                                team = 1
                             };
                         }
 
@@ -189,7 +160,7 @@ public class ResourceManagerSystem : SystemBase
 
                         ecb1.AddComponent<Dead>(resEntity);
                         // destory later to avoid race condition in BeeManagerSystem
-                        //ecb1.DestroyEntity(resEntity);
+                        ecb1.DestroyEntity(resEntity);
                     }
                     else
                     {
@@ -207,7 +178,7 @@ public class ResourceManagerSystem : SystemBase
                         else
                         {
                             ecb1.AddComponent<Dead>(resEntity);
-                            //ecb1.DestroyEntity(resEntity);
+                            ecb1.DestroyEntity(resEntity);
                         }
                     }
                 }

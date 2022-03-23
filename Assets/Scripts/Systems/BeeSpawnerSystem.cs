@@ -31,7 +31,7 @@ public class BeeSpawnerSystem : SystemBase
                     ecb.AddComponent(bee, new Velocity { vel = random.NextFloat3() * spawner.maxSpawnSpeed });
 
                     URPMaterialPropertyBaseColor baseColor;
-                    if (spawner.team == BeeTeam.TeamColor.BLUE)
+                    if (spawner.team == 0)
                     {
                         baseColor.Value = new float4(0.16471f, 0.61569f, 0.95686f, 1f);
                     }

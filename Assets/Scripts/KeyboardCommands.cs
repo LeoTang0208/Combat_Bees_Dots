@@ -6,15 +6,17 @@ using UnityEngine.SceneManagement;
 
 public class KeyboardCommands : MonoBehaviour {
 	public Text text;
-	void Start () {
-		
-	}
-	
+	void Start()
+	{
+	}	
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.H)) {
+		if (Input.GetKeyDown(KeyCode.H))
+		{
 			text.enabled = !text.enabled;
 		}
-		if (Input.GetKeyDown(KeyCode.R)) {
+		
+		if (Input.GetKeyDown(KeyCode.R))
+		{
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		}
 	}

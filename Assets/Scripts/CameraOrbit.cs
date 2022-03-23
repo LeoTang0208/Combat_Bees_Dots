@@ -12,13 +12,16 @@ public class CameraOrbit : MonoBehaviour {
 	float viewDist;
 	float smoothViewDist;
 
-	void Start () {
+	void Start ()
+	{
 		viewDist = 70f;
 		smoothViewDist = viewDist;
 	}
 	
-	void Update () {
-		if (Input.GetKey(KeyCode.Mouse1)) {
+	void Update ()
+	{
+		if (Input.GetKey(KeyCode.Mouse1))
+		{
 			viewAngles.x += Input.GetAxis("Mouse X") * sensitivity/Screen.height;
 			viewAngles.y -= Input.GetAxis("Mouse Y") * sensitivity/Screen.height;
 

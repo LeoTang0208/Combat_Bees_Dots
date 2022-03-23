@@ -6,15 +6,13 @@ using Unity.Rendering;
 
 public class BeeAuthoring : MonoBehaviour, IConvertGameObjectToEntity
 {
-    // authoring fields go here
-    public BeeTeam.TeamColor team;
+    public int team;
     public float deathTimer;
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
-        dstManager.AddComponentData(entity, new BeeTeam { team = this.team });
+        dstManager.AddComponentData(entity, new Team { team = this.team });
         dstManager.AddComponentData(entity, new DeathTimer { dTimer = this.deathTimer });
-
         float3 smPos;
         smPos.x = this.transform.position.x;
         smPos.y = this.transform.position.y;
@@ -25,14 +23,13 @@ public class BeeAuthoring : MonoBehaviour, IConvertGameObjectToEntity
 
 }
 
-public struct BeeTeam : IComponentData
+public struct Team : ISharedComponentData
 {
-    public TeamColor team;
-    public enum TeamColor
-    {
-        BLUE = 0,
-        YELLOW = 1
-    };
+    public int team;
+    /* Note:
+    BLUE = 0
+    YELLOW = 1
+    */
 }
 
 public struct SmoothPosition : IComponentData
