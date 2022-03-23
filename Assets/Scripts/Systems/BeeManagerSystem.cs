@@ -54,9 +54,9 @@ public class BeeManagerSystem : SystemBase
             .WithNone<Dead>()
             .ForEach((Entity beeEntity, in Team Team) =>
             {
-                if(HasComponent<IsHoldingResource>(beeEntity))
+                if(HasComponent<IsHolding>(beeEntity))
                 {
-                    ecb0.RemoveComponent<IsHoldingResource>(beeEntity);
+                    ecb0.RemoveComponent<IsHolding>(beeEntity);
                 }
 
                 if (Team.team == 0)
@@ -132,11 +132,8 @@ public class BeeManagerSystem : SystemBase
             .WithNone<TargetBee>()
             .WithNone<TargetResource>()
             .WithReadOnly(Team_B)
-            .WithDisposeOnCompletion(Team_B)
             .WithReadOnly(Team_Y)
-            .WithDisposeOnCompletion(Team_Y)
             .WithReadOnly(unHeldResArray)
-            .WithDisposeOnCompletion(unHeldResArray)
             .ForEach((Entity beeEntity, in Team Team) =>
             {
                 int Index;
@@ -191,9 +188,9 @@ public class BeeManagerSystem : SystemBase
         ecb.Playback(EntityManager);
         ecb.Dispose();
 
-        unHeldResArray.Dispose();
         Team_B.Dispose();
         Team_Y.Dispose();
+        unHeldResArray.Dispose();
 
         var ecb1 = new EntityCommandBuffer(Allocator.TempJob);
         Entities
@@ -318,7 +315,7 @@ public class BeeManagerSystem : SystemBase
                             }
                             else
                             {
-                                ecb2.AddComponent<IsHoldingResource>(beeEntity);
+                                ecb2.AddComponent<IsHolding>(beeEntity);
                             }
                         }
                     }
@@ -402,7 +399,7 @@ public class BeeManagerSystem : SystemBase
                 }
 
                 float resModifier = 0f;
-                if (HasComponent<IsHoldingResource>(beeEntity))
+                if (HasComponent<IsHolding>(beeEntity))
                 {
                     resModifier = resParams.resourceSize;
                 }

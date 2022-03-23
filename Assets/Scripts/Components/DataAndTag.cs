@@ -52,7 +52,7 @@ public struct Stacked : IComponentData
 {
 }
 
-public struct IsHoldingResource : IComponentData
+public struct IsHolding : IComponentData
 {
 }
 
