@@ -35,7 +35,6 @@ public class BeeManagerSystem : SystemBase
         var bufferEntity = GetSingletonEntity<ResourceParams>();
         var stackHeights = bufferFromEntity[bufferEntity];
         float deltaTime = Time.fixedDeltaTime;
-        var random = new Unity.Mathematics.Random(1234);
 
         NativeList<Entity> Team_B = new NativeList<Entity>(beeParams.maxBeeCount, Allocator.TempJob);
         NativeList<Entity> Team_Y = new NativeList<Entity>(beeParams.maxBeeCount, Allocator.TempJob);
@@ -80,16 +79,16 @@ public class BeeManagerSystem : SystemBase
                 Entity repellentFriend;
                 if (Team.team == 0)
                 {
-                    Index = random.NextInt(0, Team_B.Length);
+                    Index = UnityEngine.Random.Range(0, Team_B.Length);
                     attractiveFriend = Team_B.ElementAt(Index);
-                    Index = random.NextInt(0, Team_B.Length);
+                    Index = UnityEngine.Random.Range(0, Team_B.Length);
                     repellentFriend = Team_B.ElementAt(Index);
                 }
                 else
                 {
-                    Index = random.NextInt(0, Team_Y.Length);
+                    Index = UnityEngine.Random.Range(0, Team_Y.Length);
                     attractiveFriend = Team_Y.ElementAt(Index);
-                    Index = random.NextInt(0, Team_Y.Length);
+                    Index = UnityEngine.Random.Range(0, Team_Y.Length);
                     repellentFriend = Team_Y.ElementAt(Index);
                 }
 
@@ -108,7 +107,6 @@ public class BeeManagerSystem : SystemBase
                 {
                     velocity.vel -= delta * (beeParams.teamRepulsion * deltaTime / dist);
                 }
-                
             }).Run();
 
         NativeArray<Entity> unHeldResArray = unHeldResQuery.ToEntityArrayAsync(Allocator.TempJob, out var unHeldResHandle);
@@ -127,13 +125,13 @@ public class BeeManagerSystem : SystemBase
                 int Index;
                 TargetBee targetBee;
                 TargetResource targetRes;
-                if (random.NextFloat() < beeParams.aggression)
+                if (UnityEngine.Random.value < beeParams.aggression)
                 {
                     if (Team.team == 0)
                     {
                         if (Team_Y.Length > 0)
                         {
-                            Index = random.NextInt(0, Team_Y.Length);
+                            Index = UnityEngine.Random.Range(0, Team_Y.Length);
                             targetBee.bee = Team_Y.ElementAt(Index);
                             ecb.AddComponent<TargetBee>(beeEntity, targetBee);
                         }
@@ -142,7 +140,7 @@ public class BeeManagerSystem : SystemBase
                     {
                         if (Team_B.Length > 0)
                         {
-                            Index = random.NextInt(0, Team_B.Length);
+                            Index = UnityEngine.Random.Range(0, Team_B.Length);
                             targetBee.bee = Team_B.ElementAt(Index);
                             ecb.AddComponent<TargetBee>(beeEntity, targetBee);
                         }
@@ -152,7 +150,7 @@ public class BeeManagerSystem : SystemBase
                 {
                     if (unHeldResArray.Length > 0)
                     {
-                        Index = random.NextInt(0, unHeldResArray.Length);
+                        Index = UnityEngine.Random.Range(0, unHeldResArray.Length);
                         targetRes.res = unHeldResArray[Index];
 
                         bool stacked = HasComponent<Stacked>(targetRes.res);

@@ -23,7 +23,6 @@ public static class Utils
 
     }
 
-
     public static void UpdateStackHeights(
         ResourceGridParams resGridParams,
         DynamicBuffer<StackHeightParams> stackHeights,
@@ -57,7 +56,6 @@ public static class Utils
         return snapPos;
     }
 
-
     public static void GetGridIndex(ResourceGridParams resGridParams, float3 pos, out int gridX, out int gridY)
     {
         gridX = Mathf.FloorToInt((pos.x - resGridParams.minGridPos.x + resGridParams.gridSize.x * .5f) / resGridParams.gridSize.x);
@@ -65,7 +63,6 @@ public static class Utils
         gridX = Mathf.Clamp(gridX, 0, resGridParams.gridCounts.x - 1);
         gridY = Mathf.Clamp(gridY, 0, resGridParams.gridCounts.y - 1);
     }
-
 
     public static float3 GetStackPos(ResourceParams resParams, ResourceGridParams resGridParams, FieldAuthoring field,
                                         DynamicBuffer<StackHeightParams> stackHeights, int gridX, int gridY)
