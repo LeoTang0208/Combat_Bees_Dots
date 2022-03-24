@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-public class ResourceSpawnerSystem : SystemBase
+public class Resource_Spawner_System : SystemBase
 {
     protected override void OnUpdate()
     {
@@ -11,7 +11,6 @@ public class ResourceSpawnerSystem : SystemBase
         var resParams = GetSingleton<ResourceParams>();
         var resGridParams = GetSingleton<ResourceGridParams>();
         var ecb = new EntityCommandBuffer(Allocator.TempJob);
-        var random = new Random(1234);
 
         Entities
             .WithName("Resource_Spawner")
@@ -20,13 +19,13 @@ public class ResourceSpawnerSystem : SystemBase
                 for (int i = 0; i < spawner.count; i++)
                 {
                     var bee = ecb.Instantiate(spawner.resPrefab);
-                    
+
                     ecb.SetComponent(bee, new Scale { Value = resParams.resourceSize });
 
                     float3 pos;
                     if (spawner.isRandom)
                     {
-                        pos = Utils.GetRandomPosition(resGridParams, field, random.NextFloat());
+                        pos = Utils.GetRandomPosition(resGridParams, field);
                         ecb.SetComponent(bee, new Translation { Value = pos });
                     }
                     else

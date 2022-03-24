@@ -27,15 +27,15 @@ public class BeeControlParamsAuthoring : MonoBehaviour, IConvertGameObjectToEnti
     [Space(10)]
     public int maxBeeCount;
 
-    public BeeSpawnerAuthoring blueSpawnerPrefab;
-    public BeeSpawnerAuthoring yellowSpawnerPrefab;
+    public BeeSpawnerAuthoring blueSpawner;
+    public BeeSpawnerAuthoring yellowSpawner;
 
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
         var beeParams = new BeeControlParams
         {
-            blueSpawnerPrefab = conversionSystem.GetPrimaryEntity(this.blueSpawnerPrefab),
-            yellowSpawnerPrefab = conversionSystem.GetPrimaryEntity(this.yellowSpawnerPrefab),
+            blueSpawner = conversionSystem.GetPrimaryEntity(this.blueSpawner),
+            yellowSpawner = conversionSystem.GetPrimaryEntity(this.yellowSpawner),
             minBeeSize = this.minBeeSize,
             maxBeeSize = this.maxBeeSize,
             speedStretch = this.speedStretch,
@@ -60,8 +60,8 @@ public class BeeControlParamsAuthoring : MonoBehaviour, IConvertGameObjectToEnti
 
     public void DeclareReferencedPrefabs(List<GameObject> referencedPrefabs)
     {
-        referencedPrefabs.Add(this.blueSpawnerPrefab.gameObject);
-        referencedPrefabs.Add(this.yellowSpawnerPrefab.gameObject);
+        referencedPrefabs.Add(this.blueSpawner.gameObject);
+        referencedPrefabs.Add(this.yellowSpawner.gameObject);
     }
 }
 
@@ -84,7 +84,6 @@ public struct BeeControlParams : IComponentData
     public float hitDistance;
     public float maxSpawnSpeed;
     public int maxBeeCount;
-
-    public Entity blueSpawnerPrefab;
-    public Entity yellowSpawnerPrefab;
+    public Entity blueSpawner;
+    public Entity yellowSpawner;
 }

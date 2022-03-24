@@ -6,10 +6,10 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-[UpdateAfter(typeof(BeeSpawnerSystem))]
-[UpdateAfter(typeof(ResourceSpawnerSystem))]
+[UpdateAfter(typeof(Bee_Spawner_System))]
+[UpdateAfter(typeof(Resource_Spawner_System))]
 [UpdateBefore(typeof(TransformSystemGroup))]
-public class ResourceManagerSystem : SystemBase
+public class Resource_Manager_System : SystemBase
 {
     private EntityQuery resQuery;
 
@@ -30,25 +30,7 @@ public class ResourceManagerSystem : SystemBase
         var bufferFromEntity = GetBufferFromEntity<StackHeightParams>();
         var bufferEntity = GetSingletonEntity<ResourceParams>();
         var stackHeights = bufferFromEntity[bufferEntity];
-
         float deltaTime = Time.fixedDeltaTime;
-
-        var ecb0 = new EntityCommandBuffer(Allocator.TempJob);
-        Entities
-            .WithName("Resource_Is_Dead")
-            .WithAll<StackIndex>()
-            .WithAll<Dead>()
-            .ForEach((Entity resEntity, ref DeathTimer deathTimer) =>
-            {
-                deathTimer.dTimer -= 5 * deltaTime;
-                if (deathTimer.dTimer < 0f)
-                {
-                    ecb0.DestroyEntity(resEntity);
-                }
-
-            }).Run();
-        ecb0.Playback(EntityManager);
-        ecb0.Dispose();
 
         var ecb = new EntityCommandBuffer(Allocator.TempJob);
         Entities
@@ -88,12 +70,10 @@ public class ResourceManagerSystem : SystemBase
                 velocity.vel.y += field.gravity * deltaTime;
                 pos.Value += velocity.vel * deltaTime;
 
-                // get gridX and gridY
                 Utils.GetGridIndex(resGridParams, pos.Value, out int x, out int y);
                 gX.gridX = x;
                 gY.gridY = y;
-                
-                // check resource position x
+
                 if(math.abs(pos.Value.x) > field.size.x * .5f)
                 {
                     pos.Value.x = field.size.x * .5f * math.sign(pos.Value.x);
@@ -102,7 +82,6 @@ public class ResourceManagerSystem : SystemBase
                     velocity.vel.z *= .8f;
                 }
 
-                // check resource position y
                 if (math.abs(pos.Value.y) > field.size.y * .5f)
                 {
                     pos.Value.y = field.size.y * .5f * math.sign(pos.Value.y);
@@ -111,7 +90,6 @@ public class ResourceManagerSystem : SystemBase
                     velocity.vel.z *= .8f;
                 }
 
-                // check resource position z
                 if (math.abs(pos.Value.z) > field.size.z * .5f)
                 {
                     pos.Value.z = field.size.z * .5f * math.sign(pos.Value.z);
@@ -120,7 +98,6 @@ public class ResourceManagerSystem : SystemBase
                     velocity.vel.y *= .8f;
                 }
 
-                // Get latest buffer
                 bufferFromEntity = GetBufferFromEntity<StackHeightParams>();
                 stackHeights = bufferFromEntity[bufferEntity];
                 float floorY = Utils.GetStackPos(resParams, resGridParams, field, stackHeights, gX.gridX, gY.gridY).y;
@@ -135,7 +112,7 @@ public class ResourceManagerSystem : SystemBase
                         {
                             beeSpawner = new BeeSpawner
                             {
-                                beePrefab = beeParams.blueSpawnerPrefab,
+                                beePrefab = beeParams.blueSpawner,
                                 count = resParams.beesPerResource,
                                 maxSpawnSpeed = beeParams.maxSpawnSpeed,
                                 team = 0
@@ -145,7 +122,7 @@ public class ResourceManagerSystem : SystemBase
                         {
                             beeSpawner = new BeeSpawner
                             {
-                                beePrefab = beeParams.yellowSpawnerPrefab,
+                                beePrefab = beeParams.yellowSpawner,
                                 count = resParams.beesPerResource,
                                 maxSpawnSpeed = beeParams.maxSpawnSpeed,
                                 team = 1
@@ -165,7 +142,6 @@ public class ResourceManagerSystem : SystemBase
                         ecb1.AddComponent<Stacked>(resEntity);
                         int heightIndex = gX.gridX * resGridParams.gridCounts.y + gY.gridY;
 
-                        // Get latest buffer
                         bufferFromEntity = GetBufferFromEntity<StackHeightParams>();
                         stackHeights = bufferFromEntity[bufferEntity];
                         stackIndex.index = stackHeights[heightIndex].Value;
@@ -183,14 +159,5 @@ public class ResourceManagerSystem : SystemBase
             }).Run();
         ecb1.Playback(EntityManager);
         ecb1.Dispose();
-
-        Entities
-            .WithName("Resource_Local_To_World_TRS")
-            .WithNone<Dead>()
-            .WithAll<StackIndex>()
-            .ForEach((Entity resEntity, ref LocalToWorld localToWorld, in Scale scale, in Translation translation) =>
-            {
-                localToWorld.Value = float4x4.TRS(translation.Value, quaternion.identity, scale.Value);
-            }).ScheduleParallel();
     }
 }

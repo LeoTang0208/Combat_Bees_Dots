@@ -266,7 +266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2006952486809591344, guid: cadb850fa45d8d54ba290024bf5bbb0d, type: 3}
       propertyPath: startResourceCount
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2006952486809591345, guid: cadb850fa45d8d54ba290024bf5bbb0d, type: 3}
       propertyPath: m_RootOrder
@@ -468,7 +468,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6706287706261233431, guid: 81d7369e331d27c47ac014ae27061c4a, type: 3}
       propertyPath: attackForce
-      value: 100
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 6706287706261233431, guid: 81d7369e331d27c47ac014ae27061c4a, type: 3}
       propertyPath: flightJitter

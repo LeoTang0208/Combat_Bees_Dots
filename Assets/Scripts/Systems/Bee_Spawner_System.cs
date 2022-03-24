@@ -1,11 +1,12 @@
-﻿using Unity.Collections;
+﻿using System.Diagnostics;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
 
-public class BeeSpawnerSystem : SystemBase
+public class Bee_Spawner_System : SystemBase
 {
     protected override void OnUpdate()
     {
@@ -28,7 +29,13 @@ public class BeeSpawnerSystem : SystemBase
 
                     float size = random.NextFloat(beeParams.minBeeSize, beeParams.maxBeeSize);
                     ecb.AddComponent(bee, new Size { value = size });
-                    ecb.AddComponent(bee, new Velocity { vel = random.NextFloat3() * spawner.maxSpawnSpeed });
+
+                    Vector3 init_vel_vector = UnityEngine.Random.insideUnitSphere * spawner.maxSpawnSpeed;
+                    float3 init_vel;
+                    init_vel.x = init_vel_vector.x;
+                    init_vel.y = init_vel_vector.y;
+                    init_vel.z = init_vel_vector.z;
+                    ecb.AddComponent(bee, new Velocity {vel = init_vel});
 
                     URPMaterialPropertyBaseColor baseColor;
                     if (spawner.team == 0)
