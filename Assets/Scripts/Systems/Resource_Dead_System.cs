@@ -13,17 +13,25 @@ public class Resource_Dead_System : SystemBase
 
         var ecb = new EntityCommandBuffer(Allocator.TempJob);
         Entities
-            .WithName("Resource_Is_Dead")
+            .WithAll<StackIndex>()
+            .WithAll<Dead>()
+            .WithAll<HolderBee>()
+            .ForEach((in HolderBee beeEntity) =>
+        {
+            ecb.RemoveComponent<TargetResource>(beeEntity.holder);
+        }).Run();
+
+        Entities
             .WithAll<StackIndex>()
             .WithAll<Dead>()
             .ForEach((Entity resEntity, ref DeathTimer deathTimer) =>
+        {
+            deathTimer.dTimer -= 5 * deltaTime;
+            if (deathTimer.dTimer < 0f)
             {
-                deathTimer.dTimer -= 5 * deltaTime;
-                if (deathTimer.dTimer < 0f)
-                {
-                    ecb.DestroyEntity(resEntity);
-                }
-            }).Run();
+                ecb.DestroyEntity(resEntity);
+            }
+        }).Run();
         ecb.Playback(EntityManager);
         ecb.Dispose();
     }

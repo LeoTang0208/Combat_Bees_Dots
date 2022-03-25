@@ -12,6 +12,14 @@ public class BeeAuthoring : MonoBehaviour, IConvertGameObjectToEntity
     public void Convert(Entity entity, EntityManager dstManager, GameObjectConversionSystem conversionSystem)
     {
         dstManager.AddComponentData(entity, new Team { team = this.team });
+        if (this.team == 0)
+        {
+            dstManager.AddComponent(entity, typeof(Team_B));
+        }
+        else
+        {
+            dstManager.AddComponent(entity, typeof(Team_Y));
+        }
         dstManager.AddComponentData(entity, new DeathTimer { dTimer = this.deathTimer });
         float3 smPos;
         smPos.x = this.transform.position.x;
@@ -26,10 +34,6 @@ public class BeeAuthoring : MonoBehaviour, IConvertGameObjectToEntity
 public struct Team : IComponentData
 {
     public int team;
-    /* Note:
-    BLUE = 0
-    YELLOW = 1
-    */
 }
 
 public struct SmoothPosition : IComponentData

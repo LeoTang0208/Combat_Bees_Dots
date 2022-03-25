@@ -9,6 +9,11 @@ public struct DeathTimer : IComponentData
 {
     public float dTimer;
 }
+
+public struct Team_B : IComponentData {}
+
+public struct Team_Y : IComponentData {}
+
 public struct Dead : IComponentData {}
 
 public struct IsAttacking : IComponentData {}

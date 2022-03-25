@@ -452,7 +452,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6706287706261233431, guid: 81d7369e331d27c47ac014ae27061c4a, type: 3}
       propertyPath: carryForce
-      value: 25
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6706287706261233431, guid: 81d7369e331d27c47ac014ae27061c4a, type: 3}
       propertyPath: chaseForce
@@ -460,11 +460,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6706287706261233431, guid: 81d7369e331d27c47ac014ae27061c4a, type: 3}
       propertyPath: maxBeeSize
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6706287706261233431, guid: 81d7369e331d27c47ac014ae27061c4a, type: 3}
       propertyPath: minBeeSize
-      value: 0.75
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6706287706261233431, guid: 81d7369e331d27c47ac014ae27061c4a, type: 3}
       propertyPath: attackForce
@@ -488,7 +488,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6706287706261233431, guid: 81d7369e331d27c47ac014ae27061c4a, type: 3}
       propertyPath: teamAttraction
-      value: 5
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81d7369e331d27c47ac014ae27061c4a, type: 3}

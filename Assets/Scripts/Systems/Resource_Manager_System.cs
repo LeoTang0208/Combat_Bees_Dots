@@ -34,7 +34,6 @@ public class Resource_Manager_System : SystemBase
 
         var ecb = new EntityCommandBuffer(Allocator.TempJob);
         Entities
-            .WithName("Resource_Has_Holder")
             .ForEach((Entity resEntity, in HolderBee holderBee) =>
             {
                 if (HasComponent<Dead>(holderBee.holder))
@@ -59,7 +58,6 @@ public class Resource_Manager_System : SystemBase
 
         var ecb1 = new EntityCommandBuffer(Allocator.TempJob);
         Entities
-            .WithName("Resource_Not_Stacked")
             .WithNone<HolderBee>()
             .WithNone<Stacked>()
             .WithNone<Dead>()
@@ -132,7 +130,7 @@ public class Resource_Manager_System : SystemBase
                         ecb1.AddComponent<Translation>(newSpawner, pos);
                         ecb1.AddComponent(newSpawner, beeSpawner);
 
-                        // ToDo, spawn Falash particle
+                        // TODO, spawn Flash particle
 
                         ecb1.AddComponent<Dead>(resEntity);
                         ecb1.DestroyEntity(resEntity);

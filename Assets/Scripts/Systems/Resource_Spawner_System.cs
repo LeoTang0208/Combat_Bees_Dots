@@ -13,7 +13,6 @@ public class Resource_Spawner_System : SystemBase
         var ecb = new EntityCommandBuffer(Allocator.TempJob);
 
         Entities
-            .WithName("Resource_Spawner")
             .ForEach((Entity spawnerEntity, in resourceSpawner spawner, in Translation spawnerPos) =>
             {
                 for (int i = 0; i < spawner.count; i++)

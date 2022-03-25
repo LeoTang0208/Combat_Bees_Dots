@@ -16,28 +16,27 @@ public class Bee_Is_Holding_System : SystemBase
 
         var ecb = new EntityCommandBuffer(Allocator.TempJob);
         Dependency = Entities
-            .WithName("Bee_Has_Target_Resource")
             .WithNone<Dead>()
             .WithAll<IsHolding>()
             .WithAll<TargetResource>()
             .WithNone<TargetBee>()
             .ForEach((Entity beeEntity, ref Velocity velocity, in Team Team, in TargetResource targetRes, in Translation pos) => 
-            {
-                int t = Team.team;
-                float3 targetPos = new float3(-field.size.x * .45f + field.size.x * .9f * t, 0f, pos.Value.z);
-                float3 delta = targetPos - pos.Value;
-                float dist = math.sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
+        {
+            int t = Team.team;
+            float3 targetPos = new float3(-field.size.x * .45f + field.size.x * .9f * t, 0f, pos.Value.z);
+            float3 delta = targetPos - pos.Value;
+            float dist = math.sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
 
-                if (dist > 0)
+            if (dist > 0)
+            {
+                velocity.vel += delta * (beeParams.carryForce * deltaTime / dist);
+                if (dist < 1f)
                 {
-                    velocity.vel += delta * (beeParams.carryForce * deltaTime / dist);
-                    if (dist < 1f)
-                    {
-                        ecb.RemoveComponent<HolderBee>(targetRes.res);
-                        ecb.RemoveComponent<TargetResource>(beeEntity);
-                        ecb.RemoveComponent<IsHolding>(beeEntity);
-                    }
+                    ecb.RemoveComponent<HolderBee>(targetRes.res);
+                    ecb.RemoveComponent<TargetResource>(beeEntity);
+                    ecb.RemoveComponent<IsHolding>(beeEntity);
                 }
+            }
         }).Schedule(Dependency);
         Dependency.Complete();
         ecb.Playback(EntityManager);

@@ -10,7 +10,6 @@ public class Resource_Local2World : SystemBase
     protected override void OnUpdate()
     {
         Entities
-            .WithName("Resource_Local_To_World")
             .WithNone<Dead>()
             .WithAll<StackIndex>()
             .ForEach((Entity resEntity, ref LocalToWorld localToWorld, in Scale scale, in Translation translation) =>

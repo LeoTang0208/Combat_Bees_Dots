@@ -16,7 +16,6 @@ public class Bee_Spawner_System : SystemBase
         var random = new Unity.Mathematics.Random(1234);
 
         Entities
-            .WithName("Bee_Spawner")
             .ForEach((Entity spawnerEntity, ref BeeSpawner spawner) =>
             {
                 for (int i = 0; i < spawner.count; i++)
