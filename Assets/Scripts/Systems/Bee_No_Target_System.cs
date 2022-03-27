@@ -7,9 +7,6 @@ using Unity.Transforms;
 using UnityEngine;
 using Unity.Rendering;
 
-
-//[UpdateAfter(typeof(Bee_Spawner_System))]
-//[UpdateAfter(typeof(Resource_Spawner_System))]
 [UpdateBefore(typeof(TransformSystemGroup))]
 public class Bee_No_Target_System : SystemBase
 {
@@ -61,12 +58,13 @@ public class Bee_No_Target_System : SystemBase
             .WithNone<TargetBee>()
             .WithNone<TargetResource>()
             .WithReadOnly(UnHeld_Res)
+            .WithReadOnly(Blue)
+            .WithReadOnly(Yellow)
             .ForEach((Entity beeEntity, in Team Team) =>
             {
                 int Index;
                 TargetBee targetBee;
                 TargetResource targetRes;
-                UnityEngine.Debug.Log($"Just Dandy");
                 if (UnityEngine.Random.value < beeParams.aggression)
                 {
                     if (Team.team == 0)
@@ -108,6 +106,27 @@ public class Bee_No_Target_System : SystemBase
                         if ((!HasComponent<HolderBee>(targetRes.res)) || (stackIndex == stackHeights[index].Value - 1))
                         {
                             ecb.AddComponent<TargetResource>(beeEntity, targetRes);
+                        }
+                    }
+                    else
+                    {
+                        if (Team.team == 0)
+                        {
+                            if (Yellow.Length > 0)
+                            {
+                                Index = UnityEngine.Random.Range(0, Yellow.Length);
+                                targetBee.bee = Yellow[Index];
+                                ecb.AddComponent<TargetBee>(beeEntity, targetBee);
+                            }
+                        }
+                        else
+                        {
+                            if (Blue.Length > 0)
+                            {
+                                Index = UnityEngine.Random.Range(0, Blue.Length);
+                                targetBee.bee = Blue[Index];
+                                ecb.AddComponent<TargetBee>(beeEntity, targetBee);
+                            }
                         }
                     }
                 }

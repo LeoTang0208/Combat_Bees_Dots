@@ -49,7 +49,6 @@ public class Bee_Spawner_System : SystemBase
                 }
                 ecb.DestroyEntity(spawnerEntity);
             }).Run();
-
         ecb.Playback(EntityManager);
         ecb.Dispose();
     }

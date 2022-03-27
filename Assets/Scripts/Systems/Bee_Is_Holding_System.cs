@@ -8,14 +8,19 @@ using Unity.Transforms;
 
 public class Bee_Is_Holding_System : SystemBase
 {
+    private EntityCommandBufferSystem m_ECBSystem;
+    protected override void OnCreate()
+    {
+        m_ECBSystem = World.GetExistingSystem<EndSimulationEntityCommandBufferSystem>();
+    }
     protected override void OnUpdate()
     {
         var beeParams = GetSingleton<BeeControlParams>();
         var field = GetSingleton<FieldAuthoring>();
         float deltaTime = Time.fixedDeltaTime;
 
-        var ecb = new EntityCommandBuffer(Allocator.TempJob);
-        Dependency = Entities
+        var ecb = m_ECBSystem.CreateCommandBuffer();
+        Entities
             .WithNone<Dead>()
             .WithAll<IsHolding>()
             .WithAll<TargetResource>()
@@ -37,9 +42,7 @@ public class Bee_Is_Holding_System : SystemBase
                     ecb.RemoveComponent<IsHolding>(beeEntity);
                 }
             }
-        }).Schedule(Dependency);
-        Dependency.Complete();
-        ecb.Playback(EntityManager);
-        ecb.Dispose();
+        }).Schedule();
+        m_ECBSystem.AddJobHandleForProducer(Dependency);
     }
 }

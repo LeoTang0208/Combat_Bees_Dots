@@ -16,8 +16,9 @@ public class Resource_Dead_System : SystemBase
             .WithAll<StackIndex>()
             .WithAll<Dead>()
             .WithAll<HolderBee>()
-            .ForEach((in HolderBee beeEntity) =>
+            .ForEach((Entity resEntity, in HolderBee beeEntity) =>
         {
+            ecb.RemoveComponent<HolderBee>(resEntity);
             ecb.RemoveComponent<TargetResource>(beeEntity.holder);
         }).Run();
 

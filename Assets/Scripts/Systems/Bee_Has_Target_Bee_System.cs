@@ -7,12 +7,17 @@ using Unity.Transforms;
 
 public class Bee_Has_Target_Bee_System : SystemBase
 {
+    private EntityCommandBufferSystem m_ECBSystem;
+    protected override void OnCreate()
+    {
+        m_ECBSystem = World.GetExistingSystem<EndSimulationEntityCommandBufferSystem>();
+    }
     protected override void OnUpdate()
     {
         var beeParams = GetSingleton<BeeControlParams>();
         float deltaTime = Time.fixedDeltaTime;
 
-        var ecb = new EntityCommandBuffer(Allocator.TempJob);
+        var ecb = m_ECBSystem.CreateCommandBuffer();
         Entities
             .WithNone<Dead>()
             .WithAll<Velocity>()
@@ -47,7 +52,6 @@ public class Bee_Has_Target_Bee_System : SystemBase
 
                         if (sqrDist < beeParams.hitDistance * beeParams.hitDistance)
                         {
-                            // TODO, spawn blood particle
                             ecb.AddComponent<Dead>(targetBee.bee);
                             Velocity targetVelocity = GetComponent<Velocity>(targetBee.bee);
                             ecb.SetComponent<Velocity>(targetBee.bee, new Velocity { vel = targetVelocity.vel * .5f });
@@ -56,8 +60,7 @@ public class Bee_Has_Target_Bee_System : SystemBase
                     }
                 }
             }
-        }).Run();
-        ecb.Playback(EntityManager);
-        ecb.Dispose();
+        }).Schedule();
+        m_ECBSystem.AddJobHandleForProducer(Dependency);
     }
 }

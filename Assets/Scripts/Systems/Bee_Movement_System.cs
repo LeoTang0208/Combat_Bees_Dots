@@ -27,9 +27,10 @@ public class Bee_Movement_System : SystemBase
             .WithNone<Dead>()
             .ForEach((Entity beeEntity, ref Velocity velocity, ref Translation pos) =>
         {
+            float size = 0f;
             if(HasComponent<Size>(beeEntity))
             {
-                float size = GetComponent<Size>(beeEntity).value;
+                size = GetComponent<Size>(beeEntity).value;
             }
 
             if (math.abs(pos.Value.x) > field.size.x * .5f)
@@ -53,9 +54,9 @@ public class Bee_Movement_System : SystemBase
             {
                 resModifier = resParams.resourceSize;
             }
-            if (math.abs(pos.Value.y) > field.size.y * .5f - resModifier)
+            if (math.abs(pos.Value.y) > field.size.y * .5f - resModifier - size)
             {
-                pos.Value.y = (field.size.y * .5f - resModifier) * math.sign(pos.Value.y);
+                pos.Value.y = (field.size.y * .5f - resModifier - size) * math.sign(pos.Value.y);
                 velocity.vel.y *= -.15f;
                 velocity.vel.x *= .8f;
                 velocity.vel.z *= .8f;
@@ -80,7 +81,6 @@ public class Bee_Movement_System : SystemBase
             {
                 smoothPos.smPos = math.lerp(smoothPos.smPos, pos.Value, deltaTime * beeParams.rotationStiffness);
             }
-
             smoothDir.smDir = smoothPos.smPos - oldSmPos;
         }).ScheduleParallel();
     }
