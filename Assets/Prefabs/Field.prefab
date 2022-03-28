@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2810935610751223965}
   - component: {fileID: 1269162478}
   m_Layer: 8
-  m_Name: Field Container
+  m_Name: Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -265,7 +265,6 @@ GameObject:
   - component: {fileID: 7808198269335907004}
   - component: {fileID: 7808198269335907005}
   - component: {fileID: 7808198269335907002}
-  - component: {fileID: 7808198269335907003}
   - component: {fileID: 7808198269335907000}
   m_Layer: 8
   m_Name: Center Wall
@@ -337,19 +336,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7808198269335907003
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7808198269335907001}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7808198269335907000
 MonoBehaviour:
   m_ObjectHideFlags: 0

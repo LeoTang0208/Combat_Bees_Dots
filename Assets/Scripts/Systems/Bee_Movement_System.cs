@@ -5,6 +5,10 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 
+[UpdateAfter(typeof(Bee_Is_Holding_System))]
+[UpdateAfter(typeof(Bee_Has_Target_Bee_System))]
+[UpdateAfter(typeof(Bee_Has_Target_Resource_System))]
+[UpdateAfter(typeof(Bee_No_Target_System))]
 public class Bee_Movement_System : SystemBase
 {
     protected override void OnUpdate()
@@ -36,7 +40,7 @@ public class Bee_Movement_System : SystemBase
             if (math.abs(pos.Value.x) > field.size.x * .5f)
             {
                 pos.Value.x = field.size.x * .5f * math.sign(pos.Value.x);
-                velocity.vel.x *= -.15f;
+                velocity.vel.x *= -.5f;
                 velocity.vel.y *= .8f;
                 velocity.vel.z *= .8f;
             }
@@ -44,7 +48,7 @@ public class Bee_Movement_System : SystemBase
             if (math.abs(pos.Value.z) > field.size.z * .5f)
             {
                 pos.Value.z = field.size.z * .5f * math.sign(pos.Value.z);
-                velocity.vel.z *= -.15f;
+                velocity.vel.z *= -.5f;
                 velocity.vel.x *= .8f;
                 velocity.vel.y *= .8f;
             }
@@ -57,7 +61,7 @@ public class Bee_Movement_System : SystemBase
             if (math.abs(pos.Value.y) > field.size.y * .5f - resModifier - size)
             {
                 pos.Value.y = (field.size.y * .5f - resModifier - size) * math.sign(pos.Value.y);
-                velocity.vel.y *= -.15f;
+                velocity.vel.y *= -.5f;
                 velocity.vel.x *= .8f;
                 velocity.vel.z *= .8f;
             }

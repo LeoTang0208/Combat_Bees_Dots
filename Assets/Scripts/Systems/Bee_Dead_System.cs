@@ -19,14 +19,9 @@ public class Bee_Dead_System : SystemBase
             .WithAll<Dead>()
             .ForEach((Entity beeEntity, ref DeathTimer deathTimer, ref Velocity velocity, in Translation pos) =>
         {
-            if (UnityEngine.Random.value < (deathTimer.dTimer - .5f) * .5f)
-            {
-                // TODO, Blood Particle
-            }
-
-            velocity.vel.y += field.gravity * deltaTime;
+            // velocity.vel.y += field.gravity * deltaTime;
             deathTimer.dTimer -= 10f * deltaTime;
-            if (deathTimer.dTimer < 0f)
+            if (deathTimer.dTimer <= 0f)
             {
                 ecb.DestroyEntity(beeEntity);
             }

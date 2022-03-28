@@ -45,8 +45,8 @@ public class Bee_No_Target_System : SystemBase
         var stackHeights = bufferFromEntity[bufferEntity];
         float deltaTime = Time.fixedDeltaTime;
 
-        NativeArray<Entity> UnHeld_Res = UnHeld_Res_Query.ToEntityArrayAsync(Allocator.TempJob, out var UnHeldResHandle);
-        UnHeldResHandle.Complete();
+        NativeArray<Entity> UnHeld_Res = UnHeld_Res_Query.ToEntityArrayAsync(Allocator.TempJob, out var UnHeld_Res_Handle);
+        UnHeld_Res_Handle.Complete();
         NativeArray<Entity> Blue = Blue_Query.ToEntityArrayAsync(Allocator.TempJob, out var Blue_Handle);
         Blue_Handle.Complete();
         NativeArray<Entity> Yellow = Yellow_Query.ToEntityArrayAsync(Allocator.TempJob, out var Yellow_Handle);
@@ -54,6 +54,7 @@ public class Bee_No_Target_System : SystemBase
 
         var ecb = new EntityCommandBuffer(Allocator.TempJob);
         Entities
+            .WithAll<Team>()
             .WithNone<Dead>()
             .WithNone<TargetBee>()
             .WithNone<TargetResource>()
@@ -110,6 +111,7 @@ public class Bee_No_Target_System : SystemBase
                     }
                     else
                     {
+                        //Attack
                         if (Team.team == 0)
                         {
                             if (Yellow.Length > 0)

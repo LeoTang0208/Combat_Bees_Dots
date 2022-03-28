@@ -52,9 +52,16 @@ public class Bee_Has_Target_Bee_System : SystemBase
 
                         if (sqrDist < beeParams.hitDistance * beeParams.hitDistance)
                         {
+                            ecb.AddComponent<Blood_Particle>(targetBee.bee);
+                            /*
+                            var something_new = ecb.CreateEntity();
+                            ecb.AddComponent<Translation>(something_new, GetComponent<Translation>(targetBee.bee));
+                            ecb.AddComponent<Blood_Particle>(something_new);
+                            */
+
                             ecb.AddComponent<Dead>(targetBee.bee);
-                            Velocity targetVelocity = GetComponent<Velocity>(targetBee.bee);
-                            ecb.SetComponent<Velocity>(targetBee.bee, new Velocity { vel = targetVelocity.vel * .5f });
+                            //Velocity targetVelocity = GetComponent<Velocity>(targetBee.bee);
+                            //ecb.SetComponent<Velocity>(targetBee.bee, new Velocity { vel = targetVelocity.vel * .5f });
                             ecb.RemoveComponent<TargetBee>(beeEntity);
                         }
                     }

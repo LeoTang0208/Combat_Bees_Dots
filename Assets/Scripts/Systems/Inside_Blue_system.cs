@@ -31,29 +31,25 @@ public class Inside_Blue_system : SystemBase
             .WithNone<Dead>()
             .WithReadOnly(Blue_Pos)
             .ForEach((int entityInQueryIndex, ref Velocity velocity, in Translation pos) =>
+        {
+            var random = Unity.Mathematics.Random.CreateFromIndex((uint)entityInQueryIndex);
+
+            int Index = random.NextInt(0, Blue_Pos.Length);
+            float3 delta = Blue_Pos[Index].Value - pos.Value;
+            float dist = math.sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
+            if (dist > 0f)
             {
-                var random = Unity.Mathematics.Random.CreateFromIndex((uint)entityInQueryIndex);
-                
-                float3 rndVel = random.NextFloat3Direction();
-                velocity.vel += rndVel * beeParams.flightJitter * deltaTime;
-                velocity.vel *= (1f - beeParams.damping);
+                velocity.vel += delta * (beeParams.teamAttraction * deltaTime / dist);
+            }
 
-                int Index = random.NextInt(0, Blue_Pos.Length);
-                float3 delta = Blue_Pos[Index].Value - pos.Value;
-                float dist = math.sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
-                if (dist > 0f)
-                {
-                    velocity.vel += delta * (beeParams.teamAttraction * deltaTime / dist);
-                }
-
-                Index = random.NextInt(0, Blue_Pos.Length);
-                delta = Blue_Pos[Index].Value - pos.Value;
-                dist = math.sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
-                if (dist > 0f)
-                {
-                    velocity.vel -= delta * (beeParams.teamRepulsion * deltaTime / dist);
-                }
-            }).ScheduleParallel(Dependency);
+            Index = random.NextInt(0, Blue_Pos.Length);
+            delta = Blue_Pos[Index].Value - pos.Value;
+            dist = math.sqrt(delta.x * delta.x + delta.y * delta.y + delta.z * delta.z);
+            if (dist > 0f)
+            {
+                velocity.vel -= delta * (beeParams.teamRepulsion * deltaTime / dist);
+            }
+        }).ScheduleParallel(Dependency);
         Dependency.Complete();
         Blue_Pos.Dispose();
     }

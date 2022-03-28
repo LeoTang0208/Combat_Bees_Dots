@@ -131,9 +131,9 @@ public class Resource_Manager_System : SystemBase
                         ecb1.AddComponent(newSpawner, beeSpawner);
 
                         // TODO, spawn Flash particle
+                        ecb1.AddComponent<Flash_Particle>(resEntity);
 
                         ecb1.AddComponent<Dead>(resEntity);
-                        ecb1.DestroyEntity(resEntity);
                     }
                     else
                     {
