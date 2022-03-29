@@ -44,7 +44,6 @@ public class Bee_Movement_System : SystemBase
                 velocity.vel.y *= .8f;
                 velocity.vel.z *= .8f;
             }
-
             if (math.abs(pos.Value.z) > field.size.z * .5f)
             {
                 pos.Value.z = field.size.z * .5f * math.sign(pos.Value.z);
@@ -52,7 +51,6 @@ public class Bee_Movement_System : SystemBase
                 velocity.vel.x *= .8f;
                 velocity.vel.y *= .8f;
             }
-
             float resModifier = 0f;
             if (HasComponent<IsHolding>(beeEntity))
             {
