@@ -23,6 +23,7 @@ jobs:
 
       - name: Get Hash
         run: FOR /F "tokens=*" %%a in ('git rev-parse --short HEAD') do SET HASH=%%a
+        shell: cmd
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
@@ -34,6 +35,7 @@ jobs:
 
       - name: Build Package
         run: bz c builds\release-%HASH%.zip Assets .vscode
+        shell: cmd
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
