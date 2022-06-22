@@ -21,9 +21,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Get Hash
-        run: FOR /F "tokens=*" %%a in ('git rev-parse --short HEAD') do SET HASH=%%a
-        shell: cmd
+      - name: run bat
+        run: ./try.bat
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
@@ -32,16 +31,3 @@ jobs:
         with:
           tag_name: HASH
           release_name: HASH
-
-      - name: Build Package
-        run: bz c builds\release-%HASH%.zip Assets .vscode
-        shell: cmd
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          asset_path: builds\release-%HASH%.zip
-          asset_name: release-%HASH%.zip
-          asset_type: application/zip
