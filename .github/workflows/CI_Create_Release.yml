@@ -5,7 +5,8 @@ name: CI_Create_Release
 # Controls when the workflow will run
 on:
   push:
-    branches: [ "main" ]
+    tags:
+      - '**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -34,8 +35,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 0.1
-          release_name: 0.1
+          release_name: ${{ github.ref_name }}
 
       - name: Upload Release
         uses: actions/upload-release-asset@v1
@@ -44,5 +44,5 @@ jobs:
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: ./release.zip
-          asset_name: release.zip
+          asset_name: release-${{ github.ref_name }}.zip
           asset_content_type: application/zip
