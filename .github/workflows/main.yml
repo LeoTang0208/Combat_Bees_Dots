@@ -21,8 +21,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: run bat
-        run: ./try.bat
+      - name: Archive Release
+        uses: thedoctor0/zip-release@main
+        with:
+          type: 'zip'
+          filename: 'release.zip'
+          path: '/Assets /.vscode'
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
@@ -31,3 +35,9 @@ jobs:
         with:
           tag_name: HASH
           release_name: HASH
+
+      - name: Upload Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "release.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
