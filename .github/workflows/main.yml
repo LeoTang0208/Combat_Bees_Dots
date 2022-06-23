@@ -29,6 +29,7 @@ jobs:
           path: './Assets ./.vscode'
 
       - name: Create GitHub Release
+        id: create-release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -37,7 +38,10 @@ jobs:
           release_name: HASH
 
       - name: Upload Release
-        uses: ncipollo/release-action@v1
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          artifacts: "release.zip"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ./release.zip
+          asset_name: release.zip
